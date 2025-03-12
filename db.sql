@@ -60,4 +60,41 @@ SUM(CASE when gender = 'M' then 1 else 0 END) as male_count,
 SUM(CASE when gender = 'F' then 1 else 0 END) as female_count
 from patients;
 
---
+--Show first and last name, allergies from patients which have allergies to either 'Penicillin' or 'Morphine'. Show results ordered ascending by allergies then by first_name then by last_name.
+select first_name,last_name,allergies
+from patients
+where allergies = 'Penicillin' or allergies = 'Morphine'
+order by allergies, first_name, last_name asc;
+
+--Show patient_id, diagnosis from admissions. Find patients admitted multiple times for the same diagnosis.
+select patient_id, diagnosis
+from admissions
+group by patient_id, diagnosis
+having count(*) > 1;
+
+--Show the city and the total number of patients in the city.Order from most to least patients and then by city name ascending.
+select city,count(patient_id) as total_patients
+from patients
+group by city
+order by total_patients desc, city asc;
+
+--Show first name, last name and role of every person that is either patient or doctor.The roles are either "Patient" or "Doctor"
+SELECT first_name, last_name, 'Patient' as role FROM patients
+union all
+select first_name, last_name, 'Doctor' as role from doctors;
+
+--Show all allergies ordered by popularity. Remove NULL values from query.
+SELECT
+  allergies,
+  count(*)
+FROM patients
+WHERE allergies NOT NULL
+GROUP BY allergies
+ORDER BY count(*) DESC
+
+--Show all patient's first_name, last_name, and birth_date who were born in the 1970s decade. Sort the list starting from the earliest birth_date.
+select first_name,last_name,birth_date
+from patients
+where year(birth_date) between 1970 and 1979
+order by birth_date asc;
+
